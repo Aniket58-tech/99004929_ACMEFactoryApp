@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ACMEFactoryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Machine">
+          <Key>
+            <PropertyRef Name="machineId" />
+          </Key>
+          <Property Name="machineId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="machineName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="typeOfMachine" Type="int" Nullable="false" />
+          <Property Name="machineStartTime" Type="datetime" Nullable="false" />
+          <Property Name="machineEndTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Worker">
+          <Key>
+            <PropertyRef Name="workerId" />
+          </Key>
+          <Property Name="workerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="workerName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="typeOfWorker" Type="int" Nullable="false" />
+          <Property Name="workerStartTime" Type="datetime" Nullable="false" />
+          <Property Name="workerEndTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ACMEFactory.dbo.WorkerMachineMapping' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="WorkerMachineMapping">
+          <Key>
+            <PropertyRef Name="workerId" />
+            <PropertyRef Name="machineId" />
+          </Key>
+          <Property Name="workerId" Type="int" Nullable="false" />
+          <Property Name="machineId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_WorkerMachineMapping_Machine">
+          <End Role="Machine" Type="Self.Machine" Multiplicity="1" />
+          <End Role="WorkerMachineMapping" Type="Self.WorkerMachineMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Machine">
+              <PropertyRef Name="machineId" />
+            </Principal>
+            <Dependent Role="WorkerMachineMapping">
+              <PropertyRef Name="machineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_WorkerMachineMapping_Worker">
+          <End Role="Worker" Type="Self.Worker" Multiplicity="1" />
+          <End Role="WorkerMachineMapping" Type="Self.WorkerMachineMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Worker">
+              <PropertyRef Name="workerId" />
+            </Principal>
+            <Dependent Role="WorkerMachineMapping">
+              <PropertyRef Name="workerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="uspAddMachine" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="machineName" Type="varchar" Mode="In" />
+          <Parameter Name="typeOfMachine" Type="int" Mode="In" />
+          <Parameter Name="machineStartTime" Type="datetime" Mode="In" />
+          <Parameter Name="machineEndTime" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="uspAddWorker" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerName" Type="varchar" Mode="In" />
+          <Parameter Name="typeOfWorker" Type="int" Mode="In" />
+          <Parameter Name="workerStartTime" Type="datetime" Mode="In" />
+          <Parameter Name="workerEndTime" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="uspDeleteMachine" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="machineId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="uspDeleteWorker" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="uspUpdateMachine" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="machineId" Type="int" Mode="In" />
+          <Parameter Name="machineName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspUpdateWorker" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
+          <Parameter Name="workerName" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="uspWMMappingInput" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="workerId" Type="int" Mode="In" />
+          <Parameter Name="machineId" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="ACMEFactoryModelStoreContainer">
+          <EntitySet Name="Machine" EntityType="Self.Machine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Worker" EntityType="Self.Worker" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WorkerMachineMapping" EntityType="Self.WorkerMachineMapping" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [WorkerMachineMapping].[workerId] AS [workerId], 
+    [WorkerMachineMapping].[machineId] AS [machineId]
+    FROM [dbo].[WorkerMachineMapping] AS [WorkerMachineMapping]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_WorkerMachineMapping_Machine" Association="Self.FK_WorkerMachineMapping_Machine">
+            <End Role="Machine" EntitySet="Machine" />
+            <End Role="WorkerMachineMapping" EntitySet="WorkerMachineMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_WorkerMachineMapping_Worker" Association="Self.FK_WorkerMachineMapping_Worker">
+            <End Role="Worker" EntitySet="Worker" />
+            <End Role="WorkerMachineMapping" EntitySet="WorkerMachineMapping" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ACMEFactoryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Machine">
+          <Key>
+            <PropertyRef Name="machineId" />
+          </Key>
+          <Property Name="machineId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="machineName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="typeOfMachine" Type="Int32" Nullable="false" />
+          <Property Name="machineStartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="machineEndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Workers" Relationship="Self.WorkerMachineMapping" FromRole="Machine" ToRole="Worker" />
+        </EntityType>
+        <EntityType Name="Worker">
+          <Key>
+            <PropertyRef Name="workerId" />
+          </Key>
+          <Property Name="workerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="workerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="typeOfWorker" Type="Int32" Nullable="false" />
+          <Property Name="workerStartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="workerEndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Machines" Relationship="Self.WorkerMachineMapping" FromRole="Worker" ToRole="Machine" />
+        </EntityType>
+        <Association Name="WorkerMachineMapping">
+          <End Role="Machine" Type="Self.Machine" Multiplicity="*" />
+          <End Role="Worker" Type="Self.Worker" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="ACMEFactoryContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Machines" EntityType="Self.Machine" />
+          <EntitySet Name="Workers" EntityType="Self.Worker" />
+          <AssociationSet Name="WorkerMachineMapping" Association="Self.WorkerMachineMapping">
+            <End Role="Machine" EntitySet="Machines" />
+            <End Role="Worker" EntitySet="Workers" />
+          </AssociationSet>
+          <FunctionImport Name="uspAddMachine" ReturnType="Collection(String)">
+            <Parameter Name="machineName" Mode="In" Type="String" />
+            <Parameter Name="typeOfMachine" Mode="In" Type="Int32" />
+            <Parameter Name="machineStartTime" Mode="In" Type="DateTime" />
+            <Parameter Name="machineEndTime" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="uspAddWorker" ReturnType="Collection(String)">
+            <Parameter Name="workerName" Mode="In" Type="String" />
+            <Parameter Name="typeOfWorker" Mode="In" Type="Int32" />
+            <Parameter Name="workerStartTime" Mode="In" Type="DateTime" />
+            <Parameter Name="workerEndTime" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="uspDeleteMachine" ReturnType="Collection(String)">
+            <Parameter Name="machineId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="uspDeleteWorker" ReturnType="Collection(String)">
+            <Parameter Name="workerId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="uspUpdateMachine" ReturnType="Collection(String)">
+            <Parameter Name="machineId" Mode="In" Type="Int32" />
+            <Parameter Name="machineName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspUpdateWorker" ReturnType="Collection(String)">
+            <Parameter Name="workerId" Mode="In" Type="Int32" />
+            <Parameter Name="workerName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="uspWMMappingInput" ReturnType="Collection(String)">
+            <Parameter Name="workerId" Mode="In" Type="Int32" />
+            <Parameter Name="machineId" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ACMEFactoryModelStoreContainer" CdmEntityContainer="ACMEFactoryContext">
+          <EntitySetMapping Name="Machines">
+            <EntityTypeMapping TypeName="ACMEFactoryModel.Machine">
+              <MappingFragment StoreEntitySet="Machine">
+                <ScalarProperty Name="machineId" ColumnName="machineId" />
+                <ScalarProperty Name="machineName" ColumnName="machineName" />
+                <ScalarProperty Name="typeOfMachine" ColumnName="typeOfMachine" />
+                <ScalarProperty Name="machineStartTime" ColumnName="machineStartTime" />
+                <ScalarProperty Name="machineEndTime" ColumnName="machineEndTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Workers">
+            <EntityTypeMapping TypeName="ACMEFactoryModel.Worker">
+              <MappingFragment StoreEntitySet="Worker">
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+                <ScalarProperty Name="workerName" ColumnName="workerName" />
+                <ScalarProperty Name="typeOfWorker" ColumnName="typeOfWorker" />
+                <ScalarProperty Name="workerStartTime" ColumnName="workerStartTime" />
+                <ScalarProperty Name="workerEndTime" ColumnName="workerEndTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="WorkerMachineMapping" TypeName="ACMEFactoryModel.WorkerMachineMapping" StoreEntitySet="WorkerMachineMapping">
+            <EndProperty Name="Machine">
+              <ScalarProperty Name="machineId" ColumnName="machineId" />
+            </EndProperty>
+            <EndProperty Name="Worker">
+              <ScalarProperty Name="workerId" ColumnName="workerId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="uspAddMachine" FunctionName="ACMEFactoryModel.Store.uspAddMachine" />
+          <FunctionImportMapping FunctionImportName="uspAddWorker" FunctionName="ACMEFactoryModel.Store.uspAddWorker" />
+          <FunctionImportMapping FunctionImportName="uspDeleteMachine" FunctionName="ACMEFactoryModel.Store.uspDeleteMachine" />
+          <FunctionImportMapping FunctionImportName="uspDeleteWorker" FunctionName="ACMEFactoryModel.Store.uspDeleteWorker" />
+          <FunctionImportMapping FunctionImportName="uspUpdateMachine" FunctionName="ACMEFactoryModel.Store.uspUpdateMachine" />
+          <FunctionImportMapping FunctionImportName="uspUpdateWorker" FunctionName="ACMEFactoryModel.Store.uspUpdateWorker" />
+          <FunctionImportMapping FunctionImportName="uspWMMappingInput" FunctionName="ACMEFactoryModel.Store.uspWMMappingInput" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
