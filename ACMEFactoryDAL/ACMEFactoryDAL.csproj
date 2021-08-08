@@ -57,12 +57,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ACMEFactoryDBModel.Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="ACMEFactoryDBModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ACMEFactoryDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ACMEFactoryDBModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ACMEFactoryDBModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Machine.cs">
+      <DependentUpon>ACMEFactoryDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Worker.cs">
+      <DependentUpon>ACMEFactoryDBModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ACMEFactoryDTO\ACMEFactoryDTO.csproj">
@@ -87,6 +98,12 @@
     <Content Include="ACMEFactoryDBModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ACMEFactoryDBModel.Context.cs</LastGenOutput>
+      <DependentUpon>ACMEFactoryDBModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="ACMEFactoryDBModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ACMEFactoryDBModel.edmx</DependentUpon>
+      <LastGenOutput>ACMEFactoryDBModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

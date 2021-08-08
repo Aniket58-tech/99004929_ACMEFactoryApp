@@ -49,5 +49,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ACMEFactoryBL\ACMEFactoryBL.csproj">
+      <Project>{891090df-c712-429b-ba90-c4669f2a1b89}</Project>
+      <Name>ACMEFactoryBL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ACMEFactoryDTO\ACMEFactoryDTO.csproj">
+      <Project>{ff43610d-7632-4bca-af45-df89180f5ab0}</Project>
+      <Name>ACMEFactoryDTO</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
